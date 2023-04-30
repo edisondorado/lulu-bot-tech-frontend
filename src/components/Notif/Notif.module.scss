@@ -1,0 +1,63 @@
+.notification_visible {
+  width: auto;
+  height: 5vh;
+  position: fixed;
+  bottom: 1vh;
+  z-index: 1000;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.9vh;
+  line-height: 270%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  right: 1vh;
+  color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: #22242b;
+  border-radius: 1vh;
+  padding: 1vh;
+  opacity: 1;
+  animation-name: fadeIn;
+  animation-duration: 0.3s;
+}
+.notification_invisible {
+  position: fixed;
+  bottom: 1vh;
+  right: 1vh;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: white;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  padding: 1vh;
+  visibility: hidden;
+  opacity: 1;
+  animation-name: fadeOut;
+  animation-duration: 0.3s;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.notification p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}

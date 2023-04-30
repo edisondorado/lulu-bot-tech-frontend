@@ -1,0 +1,44 @@
+.contacts-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-menu {
+  padding-top: 3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 200px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-top: 30px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+button {
+  background-color: white;
+  color: black;
+}
+
+button::after {
+  background-color: white;
+  color: black;
+}
