@@ -23,6 +23,9 @@ web-vitals: "^2.1.4"
 # Using
 
 npm run start - Running the Frontend on port 5000
+npm run build - Building the application
+npm run test - Running test
+npm run eject - Ejecting application
 
 # Other
 
