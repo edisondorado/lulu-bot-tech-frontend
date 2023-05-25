@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./styles/Auth.module.scss";
 import clsx from "clsx";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 
 const AuthPage = () => {
   return (
@@ -11,9 +10,15 @@ const AuthPage = () => {
         <title>Авторизация</title>
       </Helmet>
       <div className={clsx(styles.auth_container)}>
-        <Link to="http://localhost:3001/auth">
-          <button className={clsx(styles.my_button)}>Авторизоваться</button>
-        </Link>
+        <button
+          className={clsx(styles.my_button)}
+          onClick={() =>
+            // (window.location.href = "https://lulu-bot.tech/api/auth")
+            (window.location.href = "http://localhost:3001/api/auth")
+          }
+        >
+          Авторизоваться
+        </button>
       </div>
     </>
   );

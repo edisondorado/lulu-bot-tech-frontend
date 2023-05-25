@@ -12,40 +12,38 @@ const ProfileAdmin = () => {
   const [selfdata, setSelfData] = useState();
   const [selfLoading, setSelfLoading] = useState(true);
   const { id } = useParams();
-
+  console.log(id);
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get(`/profile/admin/${id}`, { credentials: "include" })
+      .get(`/profile/admin/${id}/`, { credentials: "include" })
       .then((res) => {
         if (res.data.message === "User not found") {
-          window.location = `http://localhost:3000/profile/admin/${res.data.user}`;
+          window.location = `https://lulu-bot.tech/profile/admin/${res.data.user}`;
         } else {
           setData(res.data);
           setLoading(false);
+          console.log(res.data);
         }
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        // window.location = "https://lulu-bot.tech/";
       });
-  }, [id]);
-
-  useEffect(() => {
-    axios.defaults.withCredentials = true;
     axios
       .get(`/profile/admin/`, { credentials: "include" })
       .then((res) => {
         if (res.data.message === "User not found") {
-          window.location = `http://localhost:3000/profile/admin/${res.data.user}`;
+          window.location = `https://lulu-bot.tech/profile/admin/${res.data.user}`;
         } else {
           setSelfData(res.data);
           setSelfLoading(false);
+          console.log(res.data);
         }
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        // window.location = "https://lulu-bot.tech/";
       });
   }, [id]);
 
@@ -54,7 +52,8 @@ const ProfileAdmin = () => {
       <div>
         <div
           style={{ backgroundColor: "#17191f", width: "100%", height: "100vh" }}
-        ></div>
+        >
+        </div>
       </div>
     );
   }
@@ -63,7 +62,8 @@ const ProfileAdmin = () => {
       <div>
         <div
           style={{ backgroundColor: "#17191f", width: "100%", height: "100vh" }}
-        ></div>
+        >
+        </div>
       </div>
     );
   }
@@ -73,7 +73,7 @@ const ProfileAdmin = () => {
       <Helmet>
         <title>{data.nick}</title>
       </Helmet>
-      <NavMenu profile={selfdata}/>
+      <NavMenu profile={selfdata} />
       <FullProfile
         idprofile={data.id}
         nick={data.nick}
@@ -98,6 +98,8 @@ const ProfileAdmin = () => {
         accessAdm={data.accessAdm}
         accessFrom={data.accessFrom}
         theme={data.theme}
+        daysUp={data.daysUp}
+        online={data.online}
       />
     </div>
   );

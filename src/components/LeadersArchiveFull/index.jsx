@@ -21,7 +21,7 @@ export const LeadersArchiveFull = ({ admins }) => {
     if (findValue !== "") {
       if (item.nick.indexOf(findValue) !== -1) {
         return (
-          <Link to={`http://localhost:3000/profile/leader/${item.id}`}>
+          <Link to={`https://lulu-bot.tech/profile/leader/${item.id}`}>
             <div className={clsx(styles.listrow)}>
               <img
                 src={item.avatar}
@@ -64,7 +64,7 @@ export const LeadersArchiveFull = ({ admins }) => {
       }
     } else {
       return (
-        <Link to={`http://localhost:3000/profile/leader/${item.id}`}>
+        <Link to={`https://lulu-bot.tech/profile/leader/${item.id}`}>
           <div className={clsx(styles.listrow)}>
             <img
               src={item.avatar}
@@ -108,7 +108,7 @@ export const LeadersArchiveFull = ({ admins }) => {
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
   return (
@@ -136,7 +136,7 @@ export const LeadersArchiveFull = ({ admins }) => {
           </div>
         </div>
         <div className={clsx(styles.right_column)}>
-          <Link to="/admins">
+          <Link to="/leaders">
             <div className={clsx(styles.admins)}>
               <p
                 style={

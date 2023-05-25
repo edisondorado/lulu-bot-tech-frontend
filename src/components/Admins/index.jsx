@@ -4,7 +4,7 @@ import styles from "./AdminsFull.module.scss";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import FindSVG from "./img/Find.svg";
-import axios from '../../axios';
+import axios from "../../axios";
 import ArhiveSVG from "./img/Arhive.svg";
 import Add_AdminSVG from "./img/Add_Admin.svg";
 import CrosSVG from "./img/Cros.svg";
@@ -72,9 +72,9 @@ export const AdminsFull = ({ admins }) => {
 
   function findAdmin(item) {
     if (findValue !== "") {
-      if (item.nick.indexOf(findValue) !== -1) {
+      if (item.nick.toLowerCase().indexOf(findValue.toLowerCase()) !== -1) {
         return (
-          <Link to={`http://localhost:3000/profile/admin/${item.id}`}>
+          <Link to={`https://lulu-bot.tech/profile/admin/${item.id}`}>
             <div className={clsx(styles.listrow)}>
               <img
                 src={item.avatar}
@@ -117,7 +117,7 @@ export const AdminsFull = ({ admins }) => {
       }
     } else {
       return (
-        <Link to={`http://localhost:3000/profile/admin/${item.id}`}>
+        <Link to={`https://lulu-bot.tech/profile/admin/${item.id}`}>
           <div className={clsx(styles.listrow)}>
             <img
               src={item.avatar}
@@ -183,9 +183,9 @@ export const AdminsFull = ({ admins }) => {
       axios
         .post(`/register/admin`, dataAdd, { credentials: "include" })
         .then((res) => {
-          if(res.data.message === "User already exist"){
+          if (res.data.message === "User already exist") {
             handleNotificationClick("Пользователь с данным ID уже существует.");
-          } else if(res.data.message === "Success"){
+          } else if (res.data.message === "Success") {
             handleNotificationClick("Пользователь успешно создан.");
             setTimeout(() => {
               window.location.reload();
@@ -211,18 +211,16 @@ export const AdminsFull = ({ admins }) => {
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        // window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
-  (admins.users).sort(function (a, b) {
+  admins.users.sort(function (a, b) {
     return b.lvl - a.lvl;
   });
 
-  if(isLoading){
-    return(
-      <></>
-    );
+  if (isLoading) {
+    return <></>;
   }
 
   return (
@@ -233,13 +231,19 @@ export const AdminsFull = ({ admins }) => {
           onClose={handleNotificationClose}
         />
       )}
-      <div className={clsx(data.theme === "1" ? styles.fullpage : styles.light_fullpage)}>
+      <div
+        className={clsx(
+          data.theme === "1" ? styles.fullpage : styles.light_fullpage
+        )}
+      >
         <div className={clsx(styles.firstrow)}>
           <div className={clsx(styles.left_column)}>
             <div className={clsx(styles.amountAdm)}>
               <p>
                 Список администрации
-                <p style={{ fontWeight: "700" }}>(Всего: {admins.users.length})</p>
+                <p style={{ fontWeight: "700" }}>
+                  (Всего: {admins.users.length})
+                </p>
               </p>
             </div>
             <div className={clsx(styles.find_adm)}>
@@ -254,10 +258,16 @@ export const AdminsFull = ({ admins }) => {
             </div>
           </div>
           <div className={clsx(styles.right_column)}>
-            <Link to="/admins/archive">
-              <img src={ArhiveSVG} alt="" />
-            </Link>
-            <img src={Add_AdminSVG} alt="" onClick={handleShowMenu} />
+            {data.accessAdm === true ? (
+              <div>
+                <Link to="/admins/archive">
+                  <img src={ArhiveSVG} alt="" />
+                </Link>
+                <img src={Add_AdminSVG} alt="" onClick={handleShowMenu} />
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className={clsx(styles.secondrow)}>
@@ -292,14 +302,20 @@ export const AdminsFull = ({ admins }) => {
             <p>Неактив до</p>
           </div>
         </div>
-        {(admins.users).map((item) => findAdmin(item))}
+        {admins.users.map((item) => findAdmin(item))}
       </div>
       <div>
         {showMenu &&
           ReactDOM.createPortal(
             <div className={clsx(styles.popup_menu_container)}>
               <div className={clsx(styles.popup_menu_overlay)} />
-              <div className={clsx(data.theme === "1" ? styles.popup_menu : styles.light_popup_menu)}>
+              <div
+                className={clsx(
+                  data.theme === "1"
+                    ? styles.popup_menu
+                    : styles.light_popup_menu
+                )}
+              >
                 <div className={clsx(styles.header)}>
                   <p>РЕГИСТРАЦИЯ АДМИНА</p>
                   <img src={CrosSVG} alt="" onClick={handleShowMenu} />
@@ -328,7 +344,11 @@ export const AdminsFull = ({ admins }) => {
                     <select
                       value={lvlAdmin}
                       onChange={handleLvlAdmin}
-                      style={ data.theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                      style={
+                        data.theme === "1"
+                          ? { backgroundColor: "#22242b" }
+                          : { backgroundColor: "white" }
+                      }
                     >
                       <option value=""></option>
                       <option value="5">[5] Куратор</option>
@@ -343,7 +363,11 @@ export const AdminsFull = ({ admins }) => {
                     <select
                       value={reason}
                       onChange={handleReason}
-                      style={ data.theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                      style={
+                        data.theme === "1"
+                          ? { backgroundColor: "#22242b" }
+                          : { backgroundColor: "white" }
+                      }
                     >
                       <option value=""></option>
                       <option value="Обзвон">Обзвон</option>

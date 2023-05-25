@@ -42,7 +42,7 @@ export const NavMenu = ({ profile }) => {
       })
       .catch((err) => {
         console.warn(err);
-        // window.location.reload();
+        window.location.reload();
       });
   }
 
@@ -77,16 +77,28 @@ export const NavMenu = ({ profile }) => {
       .then((res) => {
         setData(res.data);
         setLoading(false);
-        if (res.data.lvl > 0 && res.data.active && res.data.lvl){
-          data.history.map((item) => {
-            if (parseTypeSort(item.time, item.text))
-              selfHistory.push(`${item.time} | ${item.text}`);
-          });
+        console.log(res.data);
+        if (res.data.lvl > 0 && res.data.active && res.data.lvl && res.data.history){
+          try{
+            res.data.history.map((item) => {
+              if(item.time && item.text){
+                if (parseTypeSort(item.time, item.text)) {
+                  return selfHistory.push(`${item.time} | ${item.text}`);
+                } else {
+                  return null;
+                }
+              } else {
+                return null;
+              }
+            }).filter(item => item !== null);            
+          }catch(e){
+            console.log(e);
+          }
         }
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        // window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
@@ -97,15 +109,27 @@ export const NavMenu = ({ profile }) => {
       .then((res) => {
         setLeaderData(res.data);
         setLoading(false);
-        console.log(res.data);
-        data.history.map((item) => {
-          if (parseTypeSort(item.time, item.text))
-            selfHistory.push(`${item.time} | ${item.text}`);
-        });
+        if(res.data.history){
+          try{
+            res.data.history.map((item) => {
+              if(item.time && item.text){
+                if (parseTypeSort(item.time, item.text)) {
+                  return selfHistory.push(`${item.time} | ${item.text}`);
+                } else {
+                  return null;
+                }
+              } else {
+                return null;
+              }
+            }).filter(item => item !== null);
+          } catch(e){
+            console.log(e);
+          }
+        }
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        // window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
@@ -174,7 +198,7 @@ export const NavMenu = ({ profile }) => {
             className={clsx(styles.navicon)}
             onClick={handlerNotif}
           />
-          <a href="http://localhost:3001/auth/logout">
+          <a href="https//lulu-bot.tech/api/auth/logout">
             <img
               src={ExitSVG}
               alt=""
@@ -193,17 +217,30 @@ export const NavMenu = ({ profile }) => {
               ? styles.light_modal
               : styles.modal
           )}
+          style={data.id === '566400714184851457' || data.id === '701440080111337513' ? {height: '15vh'} : {height: "10vh"}}
+          
         >
-          <Link to="http://localhost:3000/admins">
+          {data.active === true && data.lvl > 0 ? (
+            <Link to="https://lulu-bot.tech/admins">
             <div className={clsx(styles.admins)}>
               <p>Список администрации</p>
             </div>
           </Link>
-          <Link to="http://localhost:3000/leaders">
+          ) : (
+            <></>
+          ) }
+          {(data.active === true && data.fraction) || (data.active === true && data.lvl > 2) ? (
+          <Link to="https://lulu-bot.tech/leaders">
             <div className={clsx(styles.leaders)}>
               <p>Список лидеров</p>
             </div>
           </Link>
+          ) : (<></>)}
+          {data.id === '566400714184851457' || data.id === '701440080111337513' ? (<Link to="https://lulu-bot.tech/blacklist">
+            <div className={clsx(styles.leaders)}>
+              <p>Список провинившихся</p>
+            </div>
+          </Link>) : (<></>)} 
         </div>
       ) : (
         <></>

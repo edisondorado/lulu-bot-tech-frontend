@@ -1,7 +1,8 @@
 .fullpage {
   width: 100%;
-  height: 94vh;
   background: #17191f;
+  background-size: cover;
+  min-height: 96vh;
   .firstrow {
     margin-left: 3vh;
     padding-top: 1.2vh;
@@ -129,8 +130,9 @@
 
 .light_fullpage {
   width: 100%;
-  height: 94vh;
   background: #edf2fe;
+  background-size: cover;
+  min-height: 96vh;
   .firstrow {
     margin-left: 3vh;
     padding-top: 1.2vh;

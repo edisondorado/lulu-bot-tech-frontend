@@ -79,9 +79,9 @@ export const LeadersFull = ({ leaders }) => {
 
   function findLeaders(item) {
     if (findValue !== "") {
-      if (item.nick.indexOf(findValue) !== -1) {
+      if (item.nick.toLowerCase().indexOf(findValue.toLowerCase()) !== -1) {
         return (
-          <Link to={`http://localhost:3000/profile/leader/${item.id}`}>
+          <Link to={`https://lulu-bot.tech/profile/leader/${item.id}`}>
             <div className={clsx(styles.listrow)}>
               <img
                 src={item.avatar}
@@ -91,40 +91,52 @@ export const LeadersFull = ({ leaders }) => {
               <div className={clsx(styles.item)}>
                 <p>{item.nick}</p>
               </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.lvl}</p>
+              <div className={clsx(styles.item)} style={{ marginLeft: "5vh" }}>
+                <p>{item.fraction}</p>
+              </div>
+              <div className={clsx(styles.item)} style={{ marginLeft: "9vh" }}>
+                <p>{item.rank}</p>
+              </div>
+              <div className={clsx(styles.item)} style={{ marginLeft: "8vh" }}>
+                <p>{item.strwarn}/3</p>
               </div>
               <div className={clsx(styles.item)}>
-                <p>{item.typeAdmin}</p>
+                <Link to={item.vk}>
+                  <img
+                    src={VKSVG}
+                    alt=""
+                    style={{
+                      width: "5vh",
+                      height: "5vh",
+                      marginTop: "1.2vh",
+                      marginLeft: "16.3vh",
+                    }}
+                  />
+                </Link>
               </div>
               <div className={clsx(styles.item)}>
-                <p>{item.addTypeAdmin}</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.preds}/3</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.blat}</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.plusrep}</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.minusrep}</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.daysinactive}</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <p>{item.to_inactive}</p>
+                <Link to={item.forum}>
+                  <img
+                    src={FASVG}
+                    alt=""
+                    style={{
+                      width: "5vh",
+                      height: "5vh",
+                      marginTop: "1.2vh",
+                      marginLeft: "16.5vh",
+                    }}
+                  />
+                </Link>
               </div>
             </div>
           </Link>
         );
+      } else {
+        return null;
       }
     } else {
       return (
-        <Link to={`http://localhost:3000/profile/leader/${item.id}`}>
+        <Link to={`https://lulu-bot.tech/profile/leader/${item.id}`}>
           <div className={clsx(styles.listrow)}>
             <img
               src={item.avatar}
@@ -166,7 +178,7 @@ export const LeadersFull = ({ leaders }) => {
                     width: "5vh",
                     height: "5vh",
                     marginTop: "1.2vh",
-                    marginLeft: "32.5vh",
+                    marginLeft: "16.5vh",
                   }}
                 />
               </Link>
@@ -176,6 +188,31 @@ export const LeadersFull = ({ leaders }) => {
       );
     }
   }
+
+  function sortLeaders(leaders) {
+    leaders.sort(function(a, b) {
+      if (a.rank < b.rank) {
+        return -1;
+      }
+      if (a.rank > b.rank) {
+        return 1;
+      }
+      // If the ranks are equal, sort by the first character of the nickname
+      if (a.rank === b.rank) {
+        if (a.nick && b.nick && a.nick.charAt(0) < b.nick.charAt(0)) {
+          return -1;
+        }
+        if (a.nick && b.nick && a.nick.charAt(0) > b.nick.charAt(0)) {
+          return 1;
+        }
+      }
+      return 0;
+    });
+    return leaders;
+  }
+  
+  const sortedLeaders = sortLeaders(leaders);
+  const leaderItems = sortedLeaders.map((item) => findLeaders(item));
 
   function registerLeader(nick, id, rank, fraction, reason, date, forum, vk) {
     if (
@@ -230,7 +267,7 @@ export const LeadersFull = ({ leaders }) => {
       })
       .catch((err) => {
         console.warn(err);
-        window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
@@ -278,7 +315,7 @@ export const LeadersFull = ({ leaders }) => {
             ) : (
               <></>
             )}
-            {data.accessAdm ? (
+            {data.lvl > 2 && data.active ? (
               <img src={Add_AdminSVG} alt="" onClick={handleShowMenu} />
             ) : (
               <></>
@@ -305,7 +342,7 @@ export const LeadersFull = ({ leaders }) => {
             <p>Форум</p>
           </div>
         </div>
-        {leaders.map((item) => findLeaders(item))}
+        {leaderItems}
       </div>
       <div>
         {showMenu &&
@@ -413,6 +450,17 @@ export const LeadersFull = ({ leaders }) => {
                       <option value="Министр Здравоохранения">
                         Министр Здравоохранения
                       </option>
+                      <option style={{ color: "gray" }} value="">Банды</option>
+                      <option value="Grove Street">Grove Street</option>
+                      <option value="The Ballas">The Ballas</option>
+                      <option value="Los Santos Vagos">Los Santos Vagos</option>
+                      <option value="The Rifa">The Rifa</option>
+                      <option value="Night Wolves">Night Wolves</option>
+                      <option value="Varios Los Aztecas">Varios Los Aztecas</option>
+                      <option style={{ color: "gray" }} value="">Мафии</option>
+                      <option value="Warlock MC">Warlock MC</option>
+                      <option value="Yakuza">Yakuza</option>
+                      <option value="Russian Mafia">Russian Mafia</option>
                     </select>
                   </div>
                   <div>

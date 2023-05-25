@@ -2,43 +2,39 @@ import React, { useState, useEffect } from "react";
 import axios from "../axios";
 import { NavMenu } from "./NavMenu/index";
 import { Helmet } from "react-helmet";
-import { LeadersFull } from './Leaders/index.jsx'
+import { BlacklistFull } from './Blacklist/index'
 
-const Leaders = () => {
+const Blacklist = () => {
   const [isLoading, setLoading] = useState(true);
+  const [isSelfLoading, setSelfLoading] = useState(true);
   const [data, setData] = useState();
   const [selfData, setSelfData] = useState();
-  const [selfLoading, setSelfLoading] = useState(true);
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get(`/leaders/`, { credentials: "include" })
+      .get(`/blacklist`, { credentials: "include" })
       .then((res) => {
         setData(res.data);
         setLoading(false);
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "https://lulu-bot.tech/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get(`/profile/`, { credentials: "include" })
+      .get(`/profile/admin`, { credentials: "include" })
       .then((res) => {
-        if (res.data.message === "User not found") {
-          window.location = `https://lulu-bot.tech/profile/admin/${res.data.user}`;
-        } else {
-          setSelfData(res.data);
-          setSelfLoading(false);
-        }
+        setSelfData(res.data);
+        setSelfLoading(false);
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "https://lulu-bot.tech/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
@@ -50,7 +46,7 @@ const Leaders = () => {
     );
   }
 
-  if (selfLoading) {
+  if (isSelfLoading) {
     return (
       <div style={{ backgroundColor: "#17191f", width: "100%", height: "100vh" }}>
         
@@ -61,12 +57,12 @@ const Leaders = () => {
   return (
     <div>
       <Helmet>
-        <title>Список лидеров</title>
+        <title>Список провинившихся</title>
       </Helmet>
       <NavMenu profile={selfData}/>
-      <LeadersFull leaders={data}/>
+      <BlacklistFull Blacklist={data}/>
     </div>
   );
 };
 
-export default Leaders;
+export default Blacklist;

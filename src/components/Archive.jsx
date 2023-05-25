@@ -20,7 +20,7 @@ const Archive = () => {
       })
       .catch((err) => {
         console.warn(err);
-        window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
@@ -30,7 +30,7 @@ const Archive = () => {
       .get(`/profile/admin/`, { credentials: "include" })
       .then((res) => {
         if (res.data.message === "User not found") {
-          window.location = `http://localhost:3000/profile/admin/${res.data.user}`;
+          window.location = `https://lulu-bot.tech/profile/admin/${res.data.user}`;
         } else {
           setSelfData(res.data);
           setSelfLoading(false);
@@ -38,7 +38,7 @@ const Archive = () => {
       })
       .catch((err) => {
         console.warn(err);
-        window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 

@@ -18,13 +18,13 @@ const Admins = () => {
       })
       .catch((err) => {
         console.warn(err);
-        window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
 
   if (isLoading) {
     return (
-      <div>
+      <div style={{ backgroundColor: "#17191f", width: "100%", height: "100vh" }}>
         
       </div>
     );

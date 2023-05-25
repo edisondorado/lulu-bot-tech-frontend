@@ -99,7 +99,7 @@
         height: 55vh;
         padding-top: 2vh;
         .detail_info {
-          height: 4.6vh;
+          height: 4.2vh;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -173,6 +173,31 @@
         overflow-y: auto;
         p {
           margin-top: 1vh;
+        }
+      }
+    }
+    .activity_chart{
+      display: flex;
+      flex-direction: row;
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 3vh;
+      line-height: 3.7vh;
+      justify-content: space-between;
+      gap: 5vh;
+      height: 65vh;
+      margin-top: 2vh;
+      .column{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        .bar{
+          display: flex;
+          align-items: start;
+          background: #5155FF;
+          box-shadow: inset 0px 1.1vh 2vh rgba(34, 36, 43, 0.25);
+          border-radius: 0px 0px 2.5vh 2.5vh;
         }
       }
     }
@@ -296,8 +321,8 @@
             font-family: "Montserrat";
             font-style: normal;
             font-weight: 400;
-            font-size: 15px;
-            line-height: 18px;
+            font-size: 1.5vh;
+            line-height: 1.8vh;
             margin-left: 3.5vh;
             margin-top: 1vh;
           }
@@ -306,15 +331,15 @@
             font-family: "Montserrat";
             font-style: normal;
             font-weight: 400;
-            font-size: 15px;
-            line-height: 18px;
+            font-size: 1.5vh;
+            line-height: 1.8vh;
             margin-left: 3.5vh;
             margin-top: 1vh;
             margin-left: 3.5vh;
             width: 40vh;
-            height: 50px;
+            height: 5vh;
             border: 2px solid #5155ff;
-            border-radius: 6px;
+            border-radius: 0.6vh;
             background: transparent;
             color: black;
             text-align: center;
@@ -621,15 +646,17 @@
 
 @media only screen and (max-width: 768px) {
   .main {
+    display: flex;
     flex-direction: column;
     height: auto;
     .left_profile {
       .profile {
         width: 100%;
+        margin-left: 0vh;
         height: auto;
         .avatar {
-          width: 80px;
-          height: 80px;
+          width: 8vh;
+          height: 8vh;
         }
         p {
           font-size: 20px;
@@ -637,7 +664,7 @@
       }
       .additional {
         margin-left: 0;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         img {
           margin-left: 0;
@@ -646,10 +673,10 @@
       }
       .info {
         margin-left: 0;
-        width: 100%;
+        width: 80%;
         height: auto;
         .info_full {
-          width: 90%;
+          width: 70%;
           margin-left: auto;
           margin-right: auto;
         }
@@ -657,8 +684,9 @@
     }
     .right_profile {
       margin-top: 30px;
+      margin-left: 0vh;
       .buttons {
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         width: 100%;
         margin-top: 0;
@@ -670,6 +698,77 @@
         width: 90%;
         margin-left: auto;
         margin-right: auto;
+        div {
+          p {
+            font-family: "Montserrat";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 1vh;
+            line-height: 1.8vh;
+            margin-left: 3vh;
+            margin-top: 1vh;
+          }
+          select,
+          input {
+            font-family: "Montserrat";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 1.5vh;
+            line-height: 1.8vh;
+            margin-left: 3.5vh;
+            margin-top: 1vh;
+            margin-left: 3.5vh;
+            width: 10vh;
+            height: 5vh;
+            border: 0.2vh solid #5155ff;
+            border-radius: 0.6vh;
+            background: transparent;
+            color: white;
+            text-align: center;
+          }
+        }
+        .main_history {
+          margin-top: 2vh;
+          margin-left: 3vh;
+          font-family: "Montserrat";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 1.4vh;
+          line-height: 1.8vh;
+          display: flex;
+          flex-direction: column-reverse;
+          height: 64vh;
+          overflow-x: hidden;
+          overflow-y: auto;
+          p {
+            margin-top: 1vh;
+          }
+        }
+      }
+      .activity_chart{
+        display: flex;
+        flex-direction: row;
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 3vh;
+        line-height: 3.7vh;
+        justify-content: space-between;
+        gap: 5vh;
+        height: 65vh;
+        margin-top: 2vh;
+        .column{
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          .bar{
+            display: flex;
+            align-items: start;
+            background: #5155FF;
+            box-shadow: inset 0px 1.1vh 2vh rgba(34, 36, 43, 0.25);
+            border-radius: 0px 0px 2.5vh 2.5vh;
+          }
+        }
       }
     }
   }

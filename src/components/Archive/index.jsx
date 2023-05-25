@@ -20,7 +20,7 @@ export const ArchiveFull = ({ admins }) => {
     if (findValue !== "") {
       if (item.nick.indexOf(findValue) !== -1) {
         return (
-          <Link to={`http://localhost:3000/profile/admin/${item.id}`}>
+          <Link to={`https://lulu-bot.tech/profile/admin/${item.id}`}>
             <div className={clsx(styles.listrow)}>
               <img
                 src={item.avatar}
@@ -63,7 +63,7 @@ export const ArchiveFull = ({ admins }) => {
       }
     } else {
       return (
-        <Link to={`http://localhost:3000/profile/admin/${item.id}`}>
+        <Link to={`https://lulu-bot.tech/profile/admin/${item.id}`}>
           <div className={clsx(styles.listrow)}>
             <img
               src={item.avatar}
@@ -115,7 +115,7 @@ export const ArchiveFull = ({ admins }) => {
       })
       .catch((err) => {
         console.warn(err);
-        // window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, []);
   return (

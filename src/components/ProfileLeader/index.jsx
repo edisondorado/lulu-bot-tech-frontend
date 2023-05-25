@@ -11,6 +11,12 @@ import {
   CrosSVG,
   SaveSVG,
 } from "../Profile/img/index";
+import OnlineOnSVG from './img/OnlineOn.svg'
+import OnlineOffSVG from './img/OnlineOff.svg'
+import ArchiveOnlineOffSVG from '../../images/ArchiveOnlineOff.svg';
+import ArchiveOnlineOnSVG from '../../images/ArchiveOnlineOn.svg';
+import HistoryOnSVG from './img/HistoryOn.svg'
+import HistoryOffSVG from './img/HistoryOff.svg'
 import axios from "../../axios";
 import { useParams } from "react-router-dom";
 
@@ -32,7 +38,8 @@ export const FullProfileLeader = ({
   active,
   theme,
   accessFrom,
-  discord
+  discord,
+  online
 }) => {
   const [history, setHistory] = useState();
   const [isHistoryLoading, setHistoryLoading] = useState(true);
@@ -46,7 +53,7 @@ export const FullProfileLeader = ({
       })
       .catch((err) => {
         console.warn(err);
-        window.location = "http://localhost:3000/";
+        window.location = "https://lulu-bot.tech/";
       });
   }, [idprofile]);
   const [selectedTypeSort, setselectedTypeSort] = useState("");
@@ -63,12 +70,50 @@ export const FullProfileLeader = ({
   const [unustwarnFront, setUnustwarnFront] = useState("");
   const [nickEdit, setNickEdit] = useState("");
   const [ageFront, setAgeFront] = useState();
+  const [handleOnline, setHandleOnline] = useState();
   const [cityFront, setCityFront] = useState("");
   const [discordFront, setDiscordFront] = useState("");
   const [vkFront, setVkFront] = useState("");
   const [forumFront, setForumFront] = useState("");
   const [showMenu, setShowMenu] = useState(false);
+  const [firstDayOfWeek, setFirstDayOfWeek] = useState();
+  const [lastDayOfWeek, setLastDayOfWeek] = useState();
   const { id } = useParams();
+  const [arrayOnline, setArrayOnline] = useState({});
+  const barHeightRatio = 100 / 4 * 60 * 60;
+  useEffect(() => {
+    const now = new Date();
+    setFirstDayOfWeek(moment(now).startOf('isoWeek').format('YYYY.MM.DD'));
+    setLastDayOfWeek(moment(now).endOf('isoWeek').format('YYYY.MM.DD'));
+    online.forEach(el => {
+      if (el.date) {
+        const dateToCheck = moment(el.date);
+        const startOfWeek = moment().startOf("isoWeek");
+        if (dateToCheck.isSameOrAfter(startOfWeek)) {
+          const date = moment(el.date);
+          const dayOfWeek = date.day();
+          setArrayOnline(prevState => ({ ...prevState, [dayOfWeek]: el.online }));
+        }
+      }
+    });
+  });
+  function calculateHoursPlayed(time) {
+    if (time) {
+      const [hours, minutes, seconds] = time.split(":").map(Number);
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      const secondsIn4Hours = 4 * 60 * 60;
+      const percentPlayed = (totalSeconds / secondsIn4Hours) * 100;
+      console.log(percentPlayed.toFixed(0));
+      return percentPlayed.toFixed(0);
+    } else {
+      return "0"
+    }
+
+  }
+
+  function handleSetOnline() {
+    setHandleOnline(handleOnline === 1 ? 2 : handleOnline === 2 ? 3 : handleOnline === 3 ? 1 : 1);
+  }
 
   function handleSelectRank(event) {
     setRankFront(event.target.value);
@@ -218,10 +263,12 @@ export const FullProfileLeader = ({
       age: ageFront,
       city: cityFront,
       discord: discordFront,
+      forum: forumFront,
+      vk: vkFront
     };
     axios.defaults.withCredentials = true;
     axios
-      .post(`/api/edit/leader/${id}`, dataEdit, { credentials: "include" })
+      .post(`/edit/leader/${id}`, dataEdit, { credentials: "include" })
       .then((res) => {
         window.location.reload();
       })
@@ -230,6 +277,7 @@ export const FullProfileLeader = ({
         setShowMenu(!showMenu);
       });
   }
+  console.log(arrayOnline);
 
   return (
     <>
@@ -309,7 +357,25 @@ export const FullProfileLeader = ({
         <div className={clsx(styles.right_profile)}>
           <div className={clsx(styles.buttons)}>
             <div className={clsx(styles.left_buttons)}>
-              <img src={HistorySVG} alt="" style={{ width: "20vh" }} />
+              {handleOnline === 1 ? (
+                <>
+                  <img src={OnlineOnSVG} alt="" style={{ width: "20vh" }} />
+                  <img src={ArchiveOnlineOffSVG} alt="" style={{ width: "22.75vh" }} onClick={() => setHandleOnline(2)} />
+                  <img src={HistoryOffSVG} alt="" style={{ width: "20vh" }} onClick={() => setHandleOnline(3)} />
+                </>
+              ) : handleOnline === 2 ? (
+                <>
+                  <img src={OnlineOffSVG} alt="" style={{ width: "20vh" }} onClick={() => setHandleOnline(1)} />
+                  <img src={ArchiveOnlineOnSVG} alt="" style={{ width: "22.75vh" }} />
+                  <img src={HistoryOffSVG} alt="" style={{ width: "20vh" }} onClick={() => setHandleOnline(3)} />
+                </>
+              ) : (
+                <>
+                  <img src={OnlineOffSVG} alt="" style={{ width: "20vh" }} onClick={() => setHandleOnline(1)} />
+                  <img src={ArchiveOnlineOffSVG} alt="" style={{ width: "22.75vh" }} onClick={() => setHandleOnline(2)} />
+                  <img src={HistoryOnSVG} alt="" style={{ width: "20vh" }} />
+                </>
+              )}
             </div>
             <div className={clsx(styles.right_buttons)}>
               <a href={forum} target="_blank" rel="noopener noreferrer">
@@ -320,64 +386,131 @@ export const FullProfileLeader = ({
               </a>
             </div>
           </div>
-          <div className={clsx(styles.history)}>
-            <div className={clsx(styles.sort)}>
-              <div className={clsx(styles.typeSort)}>
-                <p>Тип</p>
-                <select
-                  value={selectedTypeSort}
-                  onChange={handleSelectTypeSort}
-                  style={
-                    theme === "1"
-                      ? { backgroundColor: "#22242b" }
-                      : { backgroundColor: "white" }
-                  }
+          {handleOnline === 1 ? (
+            <>
+              <div>
+                <h1>Онлайн за неделю [{firstDayOfWeek.toLocaleString()}] - [{lastDayOfWeek.toLocaleString()}]</h1>
+                <div className={clsx(styles.activity_chart)}>
+                  <div className={clsx(styles.column)}>
+                    <p>ПН</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[1])}%` }}>
+                      <p>{arrayOnline[1]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>ВТ</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[2])}%` }}>
+                      <p>{arrayOnline[2]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>СР</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[3])}%` }}>
+                      <p>{arrayOnline[3]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>ЧТ</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[4])}%` }}>
+                      <p>{arrayOnline[4]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>ПТ</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[5])}%` }}>
+                      <p>{arrayOnline[5]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>СБ</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[6])}%` }}>
+                      <p>{arrayOnline[6]}</p>
+                    </div>
+                  </div>
+                  <div className={clsx(styles.column)}>
+                    <p>ВС</p>
+                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[0])}%` }}>
+                      <p>{arrayOnline[0]}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : handleOnline === 2 ? (
+            <>
+              <div className={clsx(styles.history)}>
+                <div
+                  className={clsx(styles.main_history)}
+                  style={{ display: "flex", flexDirection: "column", paddingTop: "1vh" }}
                 >
-                  <option value="">Выберите тип сортировки</option>
-                  <option value=""></option>
-                  <option value="Изменение должности">Изменение должности</option>
-                  <option value="Изменение фракции">Изменение фракции</option>
-                  <option value="Изменение причины постановления">Изменение причины постановления</option>
-                  <option value="Смена даты назначения">Смена даты назначения</option>
-                  <option value="Снятие лидера">Снятие лидера</option>
-                  <option value="Выдача строгих выговоров">Выдача строгих выговоров</option>
-                  <option value="Выдача устных выговоров">Выдача устных выговоров</option>
-                  <option value="Снятие строгих выговоров">Снятие строгих выговоров</option>
-                  <option value="Снятие устных выговоров">Снятие устных выговоров</option>
-                  <option value="Смена никнейма">Смена никнейма</option>
-                  <option value="Смена возраста">Смена возраста</option>
-                  <option value="Смена города">Смена города</option>
-                  <option value="Смена дискорда">Смена дискорда</option>
-                </select>
+                  {online.map((item) => 
+                    (
+                      <p>{item.date} | {item.online}</p>
+                    )
+                  )}
+                </div>
               </div>
-              <div className={clsx(styles.fromSort)}>
-                <p>Период от</p>
-                <input
-                  type="date"
-                  value={fromSort}
-                  onChange={handleChangefromSort}
-                />
+            </>
+          ) : (
+            <div className={clsx(styles.history)}>
+              <div className={clsx(styles.sort)}>
+                <div className={clsx(styles.typeSort)}>
+                  <p>Тип</p>
+                  <select
+                    value={selectedTypeSort}
+                    onChange={handleSelectTypeSort}
+                    style={
+                      theme === "1"
+                        ? { backgroundColor: "#22242b" }
+                        : { backgroundColor: "white" }
+                    }
+                  >
+                    <option value="">Выберите тип сортировки</option>
+                    <option value=""></option>
+                    <option value="Изменение должности">Изменение должности</option>
+                    <option value="Изменение фракции">Изменение фракции</option>
+                    <option value="Изменение причины постановления">Изменение причины постановления</option>
+                    <option value="Смена даты назначения">Смена даты назначения</option>
+                    <option value="Снятие лидера">Снятие лидера</option>
+                    <option value="Выдача строгих выговоров">Выдача строгих выговоров</option>
+                    <option value="Выдача устных выговоров">Выдача устных выговоров</option>
+                    <option value="Снятие строгих выговоров">Снятие строгих выговоров</option>
+                    <option value="Снятие устных выговоров">Снятие устных выговоров</option>
+                    <option value="Смена никнейма">Смена никнейма</option>
+                    <option value="Смена возраста">Смена возраста</option>
+                    <option value="Смена города">Смена города</option>
+                    <option value="Смена дискорда">Смена дискорда</option>
+                  </select>
+                </div>
+                <div className={clsx(styles.fromSort)}>
+                  <p>Период от</p>
+                  <input
+                    type="date"
+                    value={fromSort}
+                    onChange={handleChangefromSort}
+                  />
+                </div>
+                <div className={clsx(styles.toSort)}>
+                  <p>Период до</p>
+                  <input
+                    type="date"
+                    value={toSort}
+                    onChange={handleChangetoSort}
+                  />
+                </div>
               </div>
-              <div className={clsx(styles.toSort)}>
-                <p>Период до</p>
-                <input
-                  type="date"
-                  value={toSort}
-                  onChange={handleChangetoSort}
-                />
+              <div
+                className={clsx(styles.main_history)}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
+                {!isHistoryLoading ? (
+                  history.map((item) => parseTypeSort(item))
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
-            <div
-              className={clsx(styles.main_history)}
-              style={{ display: "flex", flexDirection: "column" }}
-            >
-              {!isHistoryLoading ? (
-                history.map((item) => parseTypeSort(item))
-              ) : (
-                <></>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       </div>
       <div>
