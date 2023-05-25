@@ -116,6 +116,21 @@
       justify-content: space-between;
       width: 141vh;
     }
+    .history_online{
+      .row{
+        display: flex;
+        flex-direction: row;
+        padding-top: 10vh;
+        .box{
+          display: flex;
+          flex-direction: column;
+          padding-left: 10vh;
+          height: 5vh;
+          width: 5vh;
+          // background: #22242b;
+        }
+      }
+    }
     .history {
       width: 141vh;
       height: 77.6vh;
@@ -182,22 +197,34 @@
       font-family: 'Montserrat';
       font-style: normal;
       font-weight: 400;
-      font-size: 3vh;
+      font-size: 2.5vh;
       line-height: 3.7vh;
-      justify-content: space-between;
+      width: 141vh;
+      height: 68vh;
+      background-color: #22242b;
+      box-shadow: 0vh 0.4vh 0.4vh rgba(0, 0, 0, 0.25);
+      justify-content: row;
+      border-radius: 1vh;
       gap: 5vh;
-      height: 65vh;
       margin-top: 2vh;
       .column{
         display: flex;
         flex-direction: column;
+        align-items: center;
         text-align: center;
-        .bar{
-          display: flex;
-          align-items: start;
-          background: #5155FF;
-          box-shadow: inset 0px 1.1vh 2vh rgba(34, 36, 43, 0.25);
+        margin-right: 3vh;
+        .big_bar{
+          width: 10vh;
+          height: 60vh;
+          background-color: #555;
           border-radius: 0px 0px 2.5vh 2.5vh;
+          .bar{
+            display: flex;
+            align-items: end;
+            background: #5155FF;
+            box-shadow: inset 0px 1.1vh 2vh rgba(34, 36, 43, 0.25);
+            border-radius: 0px 0px 2.5vh 2.5vh;
+          }
         }
       }
     }
@@ -287,7 +314,7 @@
         height: 55vh;
         padding-top: 2vh;
         .detail_info {
-          height: 4.6vh;
+          height: 4.2vh;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -303,6 +330,17 @@
       flex-direction: row;
       justify-content: space-between;
       width: 141vh;
+    }
+    .history_online{
+      .row{
+        display: flex;
+        flex-direction: row;
+        .box{
+          height: 5vh;
+          width: 5vh;
+          box-shadow: 0vh 0.4vh 0.4vh rgba(0, 0, 0, 0.25);
+        }
+      }
     }
     .history {
       width: 141vh;

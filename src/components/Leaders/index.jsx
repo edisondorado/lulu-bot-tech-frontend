@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Leaders.module.scss";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ import { VKSVG, FASVG } from "../Profile/img/index";
 import DarkFindSVG from "../Admins/img/DarkFind.svg";
 import SaveSVG from "./img/Save.svg";
 import NotificationSystem from "../Notif/index";
-import { useEffect } from "react";
+import { ThemeContext } from '../../ThemeContext';
 
 export const LeadersFull = ({ leaders }) => {
   const [findValue, setFindValue] = useState("");
@@ -29,6 +29,7 @@ export const LeadersFull = ({ leaders }) => {
   const [forum, setForum] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [vk, setVk] = useState("");
+  const { theme: currentTheme } = useContext(ThemeContext);
 
   function handleFraction(event) {
     setFraction(event.target.value);
@@ -91,42 +92,14 @@ export const LeadersFull = ({ leaders }) => {
               <div className={clsx(styles.item)}>
                 <p>{item.nick}</p>
               </div>
-              <div className={clsx(styles.item)} style={{ marginLeft: "5vh" }}>
+              <div className={clsx(styles.item)} style={{ marginLeft: "24vh" }}>
                 <p>{item.fraction}</p>
               </div>
-              <div className={clsx(styles.item)} style={{ marginLeft: "9vh" }}>
+              <div className={clsx(styles.item)} style={{ marginLeft: "28vh" }}>
                 <p>{item.rank}</p>
               </div>
-              <div className={clsx(styles.item)} style={{ marginLeft: "8vh" }}>
+              <div className={clsx(styles.item)} style={{ marginLeft: "28vh" }}>
                 <p>{item.strwarn}/3</p>
-              </div>
-              <div className={clsx(styles.item)}>
-                <Link to={item.vk}>
-                  <img
-                    src={VKSVG}
-                    alt=""
-                    style={{
-                      width: "5vh",
-                      height: "5vh",
-                      marginTop: "1.2vh",
-                      marginLeft: "16.3vh",
-                    }}
-                  />
-                </Link>
-              </div>
-              <div className={clsx(styles.item)}>
-                <Link to={item.forum}>
-                  <img
-                    src={FASVG}
-                    alt=""
-                    style={{
-                      width: "5vh",
-                      height: "5vh",
-                      marginTop: "1.2vh",
-                      marginLeft: "16.5vh",
-                    }}
-                  />
-                </Link>
               </div>
             </div>
           </Link>
@@ -146,42 +119,14 @@ export const LeadersFull = ({ leaders }) => {
             <div className={clsx(styles.item)}>
               <p>{item.nick}</p>
             </div>
-            <div className={clsx(styles.item)} style={{ marginLeft: "5vh" }}>
+            <div className={clsx(styles.item)} style={{ marginLeft: "24vh" }}>
               <p>{item.fraction}</p>
             </div>
-            <div className={clsx(styles.item)} style={{ marginLeft: "9vh" }}>
+            <div className={clsx(styles.item)} style={{ marginLeft: "28vh" }}>
               <p>{item.rank}</p>
             </div>
-            <div className={clsx(styles.item)} style={{ marginLeft: "8vh" }}>
+            <div className={clsx(styles.item)} style={{ marginLeft: "28vh" }}>
               <p>{item.strwarn}/3</p>
-            </div>
-            <div className={clsx(styles.item)}>
-              <Link to={item.vk}>
-                <img
-                  src={VKSVG}
-                  alt=""
-                  style={{
-                    width: "5vh",
-                    height: "5vh",
-                    marginTop: "1.2vh",
-                    marginLeft: "16.3vh",
-                  }}
-                />
-              </Link>
-            </div>
-            <div className={clsx(styles.item)}>
-              <Link to={item.forum}>
-                <img
-                  src={FASVG}
-                  alt=""
-                  style={{
-                    width: "5vh",
-                    height: "5vh",
-                    marginTop: "1.2vh",
-                    marginLeft: "16.5vh",
-                  }}
-                />
-              </Link>
             </div>
           </div>
         </Link>
@@ -285,7 +230,7 @@ export const LeadersFull = ({ leaders }) => {
       )}
       <div
         className={clsx(
-          data.theme === "1" ? styles.fullpage : styles.light_fullpage
+          currentTheme === "1" ? styles.fullpage : styles.light_fullpage
         )}
       >
         <div className={clsx(styles.firstrow)}>
@@ -304,7 +249,7 @@ export const LeadersFull = ({ leaders }) => {
                 onChange={handleFindValue}
               />
 
-              <img src={data.theme === "1" ? FindSVG : DarkFindSVG} alt="" />
+              <img src={currentTheme === "1" ? FindSVG : DarkFindSVG} alt="" />
             </div>
           </div>
           <div className={clsx(styles.right_column)}>
@@ -326,20 +271,14 @@ export const LeadersFull = ({ leaders }) => {
           <div className={clsx(styles.item)} style={{ paddingLeft: "9.2vh" }}>
             <p>Ник</p>
           </div>
-          <div className={clsx(styles.item)} style={{ paddingLeft: "20vh" }}>
+          <div className={clsx(styles.item)} style={{ paddingLeft: "40vh" }}>
             <p>Фракция</p>
           </div>
-          <div className={clsx(styles.item)} style={{ paddingLeft: "30vh" }}>
+          <div className={clsx(styles.item)} style={{ paddingLeft: "50vh" }}>
             <p>Должность</p>
           </div>
-          <div className={clsx(styles.item)} style={{ paddingLeft: "30vh" }}>
+          <div className={clsx(styles.item)} style={{ paddingLeft: "50vh" }}>
             <p>Выговоры</p>
-          </div>
-          <div className={clsx(styles.item)} style={{ paddingLeft: "30vh" }}>
-            <p>ВК</p>
-          </div>
-          <div className={clsx(styles.item)} style={{ paddingLeft: "30vh" }}>
-            <p>Форум</p>
           </div>
         </div>
         {leaderItems}
@@ -351,7 +290,7 @@ export const LeadersFull = ({ leaders }) => {
               <div className={clsx(styles.popup_menu_overlay)} />
               <div
                 className={clsx(
-                  data.theme === "1"
+                  currentTheme === "1"
                     ? styles.popup_menu
                     : styles.light_popup_menu
                 )}
@@ -385,7 +324,7 @@ export const LeadersFull = ({ leaders }) => {
                       value={rank}
                       onChange={handleRank}
                       style={
-                        data.theme === "1"
+                        currentTheme === "1"
                           ? { backgroundColor: "#22242b" }
                           : { backgroundColor: "white" }
                       }
@@ -402,7 +341,7 @@ export const LeadersFull = ({ leaders }) => {
                       value={fraction}
                       onChange={handleFraction}
                       style={
-                        data.theme === "1"
+                        currentTheme === "1"
                           ? { backgroundColor: "#22242b" }
                           : { backgroundColor: "white" }
                       }
@@ -416,40 +355,25 @@ export const LeadersFull = ({ leaders }) => {
                       <option value="Полиция ЛВ">Полиция ЛВ</option>
                       <option value="Полиция РК">Полиция РК</option>
                       <option value="ФБР">ФБР</option>
-                      <option style={{ color: "gray" }} value="">
-                        Пра-во
-                      </option>
+                      <option style={{ color: "gray" }} value="">Пра-во</option>
                       <option value="Правительство">Правительство</option>
-                      <option value="Центр Лицензирования">
-                        Центр Лицензирования
-                      </option>
-                      <option style={{ color: "gray" }} value="">
-                        МО
-                      </option>
+                      <option value="Центральный Банк">Центральный Банк(9)</option>
+                      <option value="Центр Лицензирования">Центр Лицензирования</option>
+                      <option style={{ color: "gray" }} value="">МО</option>
                       <option value="Армия ЛС">Армия ЛС</option>
                       <option value="Армия СФ">Армия СФ</option>
                       <option value="ТСР">ТСР</option>
-                      <option style={{ color: "gray" }} value="">
-                        МЗ
-                      </option>
+                      <option style={{ color: "gray" }} value="">МЗ</option>
                       <option value="Больница ЛС">Больница ЛС</option>
                       <option value="Больница ЛВ">Больница ЛВ</option>
-                      <option style={{ color: "gray" }} value="">
-                        СМИ
-                      </option>
+                      <option style={{ color: "gray" }} value="">СМИ</option>
                       <option value="Радиоцентр ЛС">Радиоцентр ЛС</option>
-                      <option style={{ color: "gray" }} value="">
-                        Министры
-                      </option>
-                      <option value="Кабинет Министров">
-                        Кабинет Министров
-                      </option>
+                      <option style={{ color: "gray" }} value="">Министры</option>
+                      <option value="Премьер-Министр">Премьер-Министр</option>
                       <option value="Министр Финансов">Министр Финансов</option>
                       <option value="Министр Обороны">Министр Обороны</option>
                       <option value="Министр Юстиции">Министр Юстиции</option>
-                      <option value="Министр Здравоохранения">
-                        Министр Здравоохранения
-                      </option>
+                      <option value="Министр Здравоохранения">Министр Здравоохранения</option>
                       <option style={{ color: "gray" }} value="">Банды</option>
                       <option value="Grove Street">Grove Street</option>
                       <option value="The Ballas">The Ballas</option>
@@ -469,7 +393,7 @@ export const LeadersFull = ({ leaders }) => {
                       value={reason}
                       onChange={handleReason}
                       style={
-                        data.theme === "1"
+                        currentTheme === "1"
                           ? { backgroundColor: "#22242b" }
                           : { backgroundColor: "white" }
                       }

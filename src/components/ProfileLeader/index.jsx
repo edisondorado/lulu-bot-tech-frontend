@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 import styles from "./ProfileLeader.module.scss";
@@ -19,6 +19,7 @@ import HistoryOnSVG from './img/HistoryOn.svg'
 import HistoryOffSVG from './img/HistoryOff.svg'
 import axios from "../../axios";
 import { useParams } from "react-router-dom";
+import { ThemeContext } from '../../ThemeContext';
 
 export const FullProfileLeader = ({
   idprofile,
@@ -36,7 +37,6 @@ export const FullProfileLeader = ({
   forum,
   vk,
   active,
-  theme,
   accessFrom,
   discord,
   online
@@ -81,6 +81,8 @@ export const FullProfileLeader = ({
   const { id } = useParams();
   const [arrayOnline, setArrayOnline] = useState({});
   const barHeightRatio = 100 / 4 * 60 * 60;
+  const { theme: currentTheme } = useContext(ThemeContext);
+
   useEffect(() => {
     const now = new Date();
     setFirstDayOfWeek(moment(now).startOf('isoWeek').format('YYYY.MM.DD'));
@@ -96,7 +98,7 @@ export const FullProfileLeader = ({
         }
       }
     });
-  });
+  }, []);
   function calculateHoursPlayed(time) {
     if (time) {
       const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -281,7 +283,7 @@ export const FullProfileLeader = ({
 
   return (
     <>
-      <div className={clsx(theme === "1" ? styles.main : styles.light_main)}>
+      <div className={clsx(currentTheme === "1" ? styles.main : styles.light_main)}>
         <div className={clsx(styles.left_profile)}>
           <div className={clsx(styles.profile)}>
             <img
@@ -460,7 +462,7 @@ export const FullProfileLeader = ({
                     value={selectedTypeSort}
                     onChange={handleSelectTypeSort}
                     style={
-                      theme === "1"
+                      currentTheme === "1"
                         ? { backgroundColor: "#22242b" }
                         : { backgroundColor: "white" }
                     }
@@ -520,7 +522,7 @@ export const FullProfileLeader = ({
               <div className={clsx(styles.popup_menu_overlay)} />
               <div
                 className={clsx(
-                  theme === "1" ? styles.popup_menu : styles.light_popup_menu
+                  currentTheme === "1" ? styles.popup_menu : styles.light_popup_menu
                 )}
               >
                 <div className={clsx(styles.header)}>
@@ -535,7 +537,7 @@ export const FullProfileLeader = ({
                         value={rankFront}
                         onChange={handleSelectRank}
                         style={
-                          theme === "1"
+                          currentTheme === "1"
                             ? { backgroundColor: "#22242b" }
                             : { backgroundColor: "white" }
                         }
@@ -552,7 +554,7 @@ export const FullProfileLeader = ({
                         value={fractionFront}
                         onChange={handleSelectFraction}
                         style={
-                          theme === "1"
+                          currentTheme === "1"
                             ? { backgroundColor: "#22242b" }
                             : { backgroundColor: "white" }
                         }
@@ -570,6 +572,7 @@ export const FullProfileLeader = ({
                           Пра-во
                         </option>
                         <option value="Правительство">Правительство</option>
+                        <option value="Центральный Банк">Центральный Банк(9)</option>
                         <option value="Центр Лицензирования">
                           Центр Лицензирования
                         </option>
@@ -591,8 +594,8 @@ export const FullProfileLeader = ({
                         <option style={{ color: "gray" }} value="">
                           Министры
                         </option>
-                        <option value="Кабинет Министров">
-                          Кабинет Министров
+                        <option value="Премьер-Министр">
+                          Премьер-Министр
                         </option>
                         <option value="Министр Финансов">
                           Министр Финансов
@@ -610,7 +613,7 @@ export const FullProfileLeader = ({
                         value={reasonFront}
                         onChange={handleSelectReasonFront}
                         style={
-                          theme === "1"
+                          currentTheme === "1"
                             ? { backgroundColor: "#22242b" }
                             : { backgroundColor: "white" }
                         }

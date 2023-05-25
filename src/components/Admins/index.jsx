@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import styles from "./AdminsFull.module.scss";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import CrosSVG from "./img/Cros.svg";
 import AddSVG from "./img/Add.svg";
 import DarkFindSVG from "./img/DarkFind.svg";
 import NotificationSystem from "../Notif/index";
-import { useEffect } from "react";
+import { ThemeContext } from '../../ThemeContext';
 
 export const AdminsFull = ({ admins }) => {
   const [findValue, setFindValue] = useState("");
@@ -27,6 +27,7 @@ export const AdminsFull = ({ admins }) => {
   const [forum, setForum] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [vk, setVk] = useState("");
+  const { theme: currentTheme } = useContext(ThemeContext);
 
   const handleNotificationClick = (message) => {
     setShowNotification(true);
@@ -220,7 +221,7 @@ export const AdminsFull = ({ admins }) => {
   });
 
   if (isLoading) {
-    return <></>;
+    return <div style={{ backgroundColor: "#17191f", width: "100%", height: "100vh" }}></div>;
   }
 
   return (
@@ -233,7 +234,7 @@ export const AdminsFull = ({ admins }) => {
       )}
       <div
         className={clsx(
-          data.theme === "1" ? styles.fullpage : styles.light_fullpage
+          currentTheme === "1" ? styles.fullpage : styles.light_fullpage
         )}
       >
         <div className={clsx(styles.firstrow)}>
@@ -254,7 +255,7 @@ export const AdminsFull = ({ admins }) => {
                 onChange={handleFindValue}
               />
 
-              <img src={data.theme === "1" ? FindSVG : DarkFindSVG} alt="" />
+              <img src={currentTheme === "1" ? FindSVG : DarkFindSVG} alt="" />
             </div>
           </div>
           <div className={clsx(styles.right_column)}>
@@ -311,7 +312,7 @@ export const AdminsFull = ({ admins }) => {
               <div className={clsx(styles.popup_menu_overlay)} />
               <div
                 className={clsx(
-                  data.theme === "1"
+                  currentTheme === "1"
                     ? styles.popup_menu
                     : styles.light_popup_menu
                 )}
@@ -345,7 +346,7 @@ export const AdminsFull = ({ admins }) => {
                       value={lvlAdmin}
                       onChange={handleLvlAdmin}
                       style={
-                        data.theme === "1"
+                        currentTheme === "1"
                           ? { backgroundColor: "#22242b" }
                           : { backgroundColor: "white" }
                       }
@@ -364,7 +365,7 @@ export const AdminsFull = ({ admins }) => {
                       value={reason}
                       onChange={handleReason}
                       style={
-                        data.theme === "1"
+                        currentTheme === "1"
                           ? { backgroundColor: "#22242b" }
                           : { backgroundColor: "white" }
                       }

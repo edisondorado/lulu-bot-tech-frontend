@@ -9,12 +9,14 @@ import Archive from "./components/Archive";
 import Leaders from "./components/Leaders";
 import LeadersArchive from "./components/LeadersArchive";
 import Blacklist from "./components/Blacklist";
+import DownloadTools from "./components/DownloadTools";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<AuthPage />} />
+        <Route path="/download/tools" element={<DownloadTools />} />
         <Route path="/blacklist" element={<Blacklist />} />
         <Route path="/forbidden" element={<Forbidden />} />
         <Route path="/profile/admin/:id" element={<ProfileAdmin />} />

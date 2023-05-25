@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -15,51 +15,19 @@ import {
   MarkSVG,
   LightDarkSVG,
 } from "./img/index";
-import { useState } from "react";
-import { useEffect } from "react";
 import axios from "../../axios";
+import { ThemeContext } from '../../ThemeContext';
 
 export const NavMenu = ({ profile }) => {
   const [data, setData] = useState();
   const [leaderData, setLeaderData] = useState();
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [statusModal, setStatusModal] = useState(false);
   const [statusSettings, setStatusSettings] = useState(false);
   const [statusNotif, setStatusNotif] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   function handlerNotif() {
     setStatusNotif(!statusNotif);
-  }
-
-  function handleLightTheme() {
-    const dataTheme = {
-      theme: "0",
-    };
-    axios.defaults.withCredentials = true;
-    axios
-      .post(`/theme/${data.id}`, dataTheme, { credentials: "include" })
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.warn(err);
-        window.location.reload();
-      });
-  }
-
-  function handleDarkTheme() {
-    const dataTheme = {
-      theme: "1",
-    };
-    axios.defaults.withCredentials = true;
-    axios
-      .post(`/theme/${data.id}`, dataTheme, { credentials: "include" })
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.warn(err);
-        window.location.reload();
-      });
   }
 
   function handlerSettings() {
@@ -159,9 +127,9 @@ export const NavMenu = ({ profile }) => {
     <>
       <div
         className={clsx(
-          profile.theme === "1"
+          theme === "1"
             ? styles.navmenu
-            : profile.theme === "0"
+            : theme === "0"
             ? styles.light_navmenu
             : styles.navmenu
         )}
@@ -211,9 +179,9 @@ export const NavMenu = ({ profile }) => {
       {statusModal ? (
         <div
           className={clsx(
-            profile.theme === "1"
+            theme === "1"
               ? styles.modal
-              : profile.theme === "0"
+              : theme === "0"
               ? styles.light_modal
               : styles.modal
           )}
@@ -248,7 +216,7 @@ export const NavMenu = ({ profile }) => {
       {statusNotif && !isLoading ? (
         <div
           className={clsx(
-            profile.theme === "1"
+            theme === "1"
               ? styles.modal_popup
               : styles.light_modal_popup
           )}
@@ -270,9 +238,9 @@ export const NavMenu = ({ profile }) => {
       {statusSettings && !isLoading ? (
         <div
           className={clsx(
-            profile.theme === "1"
+            theme === "1"
               ? styles.popup_menu_container
-              : profile.theme === "0"
+              : theme === "0"
               ? styles.light_popup_menu_container
               : styles.popup_menu_container
           )}
@@ -280,9 +248,9 @@ export const NavMenu = ({ profile }) => {
           <div className={clsx(styles.popup_menu_overlay)} />
           <div
             className={clsx(
-              profile.theme === "1"
+              theme === "1"
                 ? styles.modal_settings
-                : profile.theme === "0"
+                : theme === "0"
                 ? styles.light_modal_settings
                 : styles.modal_settings
             )}
@@ -297,7 +265,7 @@ export const NavMenu = ({ profile }) => {
                 src={MarkSVG}
                 alt=""
                 style={
-                  profile.theme === "1"
+                  theme === "1"
                     ? { position: "absolute", marginLeft: "9vh" }
                     : { position: "absolute", marginLeft: "3vh" }
                 }
@@ -305,13 +273,13 @@ export const NavMenu = ({ profile }) => {
               <img
                 src={LightSVG}
                 alt=""
-                onClick={handleLightTheme}
+                onClick={toggleTheme}
                 style={{ width: "4.5vh", height: "4.5vh" }}
               />
               <img
-                src={profile.theme === "1" ? DarkSVG : LightDarkSVG}
+                src={theme === "1" ? DarkSVG : LightDarkSVG}
                 alt=""
-                onClick={handleDarkTheme}
+                onClick={toggleTheme}
                 style={{ marginLeft: "1vh", width: "4.5vh", height: "4.5vh" }}
               />
             </div>

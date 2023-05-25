@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Blacklist.module.scss";
 import clsx from "clsx";
@@ -10,7 +10,7 @@ import CrosSVG from "../Admins/img/Cros.svg";
 import AddSVG from "../Admins/img/Add.svg";
 import DarkFindSVG from "../Admins/img/DarkFind.svg";
 import NotificationSystem from "../Notif/index";
-import { useEffect } from "react";
+import { ThemeContext } from '../../ThemeContext';
 
 export const BlacklistFull = ({ Blacklist }) => {
   const [findValue, setFindValue] = useState("");
@@ -24,6 +24,7 @@ export const BlacklistFull = ({ Blacklist }) => {
   const [forum, setForum] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [vk, setVk] = useState("");
+  const { theme: currentTheme } = useContext(ThemeContext);
 
   function handleIp(event) {
     setIp(event.target.value);
@@ -175,7 +176,7 @@ export const BlacklistFull = ({ Blacklist }) => {
       )}
       <div
         className={clsx(
-          data.theme === "1" ? styles.fullpage : styles.light_fullpage
+          currentTheme === "1" ? styles.fullpage : styles.light_fullpage
         )}
       >
         <div className={clsx(styles.firstrow)}>
@@ -196,7 +197,7 @@ export const BlacklistFull = ({ Blacklist }) => {
                 onChange={handleFindValue}
               />
 
-              <img src={data.theme === "1" ? FindSVG : DarkFindSVG} alt="" />
+              <img src={currentTheme === "1" ? FindSVG : DarkFindSVG} alt="" />
             </div>
           </div>
           <div className={clsx(styles.right_column)}>
@@ -229,7 +230,7 @@ export const BlacklistFull = ({ Blacklist }) => {
               <div className={clsx(styles.popup_menu_overlay)} />
               <div
                 className={clsx(
-                  data.theme === "1"
+                  currentTheme === "1"
                     ? styles.popup_menu
                     : styles.light_popup_menu
                 )}

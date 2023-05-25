@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./Archive.module.scss";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
@@ -6,11 +6,13 @@ import { VKSVG, FASVG } from "../Profile/img/index";
 import FindSVG from "./img/Find.svg";
 import axios from "../../axios";
 import { useEffect } from "react";
+import { ThemeContext } from '../../ThemeContext';
 
 export const LeadersArchiveFull = ({ admins }) => {
   const [findValue, setFindValue] = useState("");
   const [data, setData] = useState("");
   const [isLoading, setLoading] = useState(true);
+  const { theme: currentTheme } = useContext(ThemeContext);
   admins.sort(function (a, b) {
     return b.lvl - a.lvl;
   });
@@ -114,7 +116,7 @@ export const LeadersArchiveFull = ({ admins }) => {
   return (
     <div
       className={clsx(
-        data.theme === "1" ? styles.fullpage : styles.light_fullpage
+        currentTheme === "1" ? styles.fullpage : styles.light_fullpage
       )}
     >
       <div className={clsx(styles.firstrow)}>
@@ -140,7 +142,7 @@ export const LeadersArchiveFull = ({ admins }) => {
             <div className={clsx(styles.admins)}>
               <p
                 style={
-                  data.theme === "1" ? { color: "white" } : { color: "white" }
+                  currentTheme === "1" ? { color: "white" } : { color: "white" }
                 }
               >
                 Лидеры

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 import styles from "./Profile.module.scss";
@@ -19,6 +19,7 @@ import ArchiveOnlineOnSVG from '../../images/ArchiveOnlineOn.svg';
 import HistoryOnSVG from '../ProfileLeader/img/HistoryOn.svg'
 import HistoryOffSVG from '../ProfileLeader/img/HistoryOff.svg'
 import { useParams } from "react-router-dom";
+import { ThemeContext } from '../../ThemeContext';
 
 export const FullProfile = ({
   idprofile,
@@ -42,7 +43,6 @@ export const FullProfile = ({
   inactive,
   blat,
   accessFrom,
-  theme,
   daysUp,
   online
 }) => {
@@ -87,24 +87,51 @@ export const FullProfile = ({
   const [showMenu, setShowMenu] = useState(false);
   const [stopinactive, setstopinactive] = useState("");
   const { id } = useParams();
-  const [arrayOnline, setArrayOnline] = useState({});
+  const [arrayOnline, setArrayOnline] = useState([]);
+  const [totalSum, setTotalSum] = useState();
   const barHeightRatio = 100 / 4 * 60 * 60;
+  const { theme: currentTheme } = useContext(ThemeContext);
+  const sumTime = (arrayOnline) => {
+    if(Array.isArray(arrayOnline)){
+      const totalSeconds = arrayOnline.reduce((acc, time) => {
+        const [hours, minutes, seconds] = time.split(':');
+        return acc + parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
+      }, 0);
+
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+      console.log("NOT ARRAY")
+    }
+  };
   useEffect(() => {
     const now = new Date();
     setFirstDayOfWeek(moment(now).startOf('isoWeek').format('YYYY.MM.DD'));
     setLastDayOfWeek(moment(now).endOf('isoWeek').format('YYYY.MM.DD'));
-    online.forEach(el => {
+  
+    const updatedArrayOnline = online.reduce((acc, el) => {
       if (el.date) {
         const dateToCheck = moment(el.date);
         const startOfWeek = moment().startOf("isoWeek");
         if (dateToCheck.isSameOrAfter(startOfWeek)) {
           const date = moment(el.date);
           const dayOfWeek = date.day();
-          setArrayOnline(prevState => ({ ...prevState, [dayOfWeek]: el.online }));
+          acc[dayOfWeek] = el.online;
         }
       }
-    });
-  });
+      return acc;
+    }, []);
+  
+    setArrayOnline(updatedArrayOnline);
+  }, []);
+  
+  useEffect(() => {
+    setTotalSum(sumTime(arrayOnline));
+  }, [arrayOnline]);
+
   function calculateHoursPlayed(time) {
     if (time) {
       const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -118,6 +145,14 @@ export const FullProfile = ({
     }
 
   }
+  const getWeekDates = (weekNumber) => {
+    const endDate = moment().subtract(weekNumber, 'weeks').endOf('isoWeek');
+    const startDate = moment(endDate).subtract(6, 'days');
+    return { startDate, endDate };
+  };
+  
+  const numberOfWeeks = 3;
+  const startDate = moment();
 
   function handlegiveminusrep(event) {
     setgiveminusrep(event.target.value);
@@ -293,7 +328,7 @@ export const FullProfile = ({
 
   return (
     <>
-      <div className={clsx( theme === "1" ? styles.main : styles.light_main)}>
+      <div className={clsx( currentTheme === "1" ? styles.main : styles.light_main)}>
         <div className={clsx(styles.left_profile)}>
           <div className={clsx(styles.profile)}>
             <img src={avatar} alt="" className={clsx(styles.avatar)} style={{marginRight: '0.7vh'}} />
@@ -406,67 +441,68 @@ export const FullProfile = ({
           {handleOnline === 1 ? (
             <>
               <div>
-                <h1>Онлайн за неделю [{firstDayOfWeek.toLocaleString()}] - [{lastDayOfWeek.toLocaleString()}]</h1>
+                <h1 style={{display: "flex", justifyContent: 'center'}}>Информация за период [{firstDayOfWeek.toLocaleString()}] - [{lastDayOfWeek.toLocaleString()}]</h1>
+                <h1 style={{display: "flex", justifyContent: 'center'}}>Общий онлайн - {totalSum}</h1>
                 <div className={clsx(styles.activity_chart)}>
-                  <div className={clsx(styles.column)}>
-                    <p>ПН</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[1])}%` }}>
-                      <p>{arrayOnline[1]}</p>
+                  <div className={clsx(styles.column)} style={{marginRight: "1vh"}}>
+                    <p>Понедельник</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[1])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[1]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>ВТ</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[2])}%` }}>
-                      <p>{arrayOnline[2]}</p>
+                    <p>Вторник</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[2])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[2]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>СР</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[3])}%` }}>
-                      <p>{arrayOnline[3]}</p>
+                    <p>Среда</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[3])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[3]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>ЧТ</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[4])}%` }}>
-                      <p>{arrayOnline[4]}</p>
+                    <p>Четверг</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[4])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[4]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>ПТ</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[5])}%` }}>
-                      <p>{arrayOnline[5]}</p>
+                    <p>Пятница</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[5])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[5]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>СБ</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[6])}%` }}>
-                      <p>{arrayOnline[6]}</p>
+                    <p>Суббота</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[6])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[6]}</p>
                   </div>
                   <div className={clsx(styles.column)}>
-                    <p>ВС</p>
-                    <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[0])}%` }}>
-                      <p>{arrayOnline[0]}</p>
+                    <p>Воскресенье</p>
+                    <div className={clsx(styles.big_bar)}>
+                      <div className={clsx(styles.bar)} style={{ height: `${calculateHoursPlayed(arrayOnline[0])}%` }}></div>
                     </div>
+                    <p>{arrayOnline[0]}</p>
                   </div>
                 </div>
               </div>
             </>
           ) : handleOnline === 2 ? (
             <>
-              <div className={clsx(styles.history)}>
-                <div
-                  className={clsx(styles.main_history)}
-                  style={{ display: "flex", flexDirection: "column", paddingTop: "1vh" }}
-                >
-                  {online.map((item) => 
-                    (
-                      <p>{item.date} | {item.online}</p>
-                    )
-                  )}
-                </div>
-              </div>
+              {online.map((item) => 
+                (
+                  <p>{item.date} | {item.online}</p>
+                )
+              )}
             </>
           ) : (
             <div className={clsx(styles.history)}>
@@ -476,7 +512,7 @@ export const FullProfile = ({
                   <select
                     value={selectedTypeSort}
                     onChange={handleSelectTypeSort}
-                    style={ theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                    style={ currentTheme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
                   >
                     <option value="">Выберите тип сортировки</option>
                     <option value=""></option>
@@ -526,7 +562,7 @@ export const FullProfile = ({
           ReactDOM.createPortal(
             <div className={clsx(styles.popup_menu_container)}>
               <div className={clsx(styles.popup_menu_overlay)} />
-              <div className={clsx( theme === "1" ? styles.popup_menu : styles.light_popup_menu)}>
+              <div className={clsx( currentTheme === "1" ? styles.popup_menu : styles.light_popup_menu)}>
                 <div className={clsx(styles.header)}>
                   <p>Редактирование</p>
                   <img src={CrosSVG} alt="" onClick={showPopup} />
@@ -538,7 +574,7 @@ export const FullProfile = ({
                       <select
                         value={typeAdmin}
                         onChange={handleSelecttypeadmin}
-                        style={ theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                        style={ currentTheme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
                       >
                         <option value="">Выберите должность</option>
                         <option value=""></option>
@@ -596,7 +632,7 @@ export const FullProfile = ({
                       <select
                         value={lvl}
                         onChange={handleSelectlvl}
-                        style={ theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                        style={ currentTheme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
                       >
                         <option value="">Выберите уровень</option>
                         <option value=""></option>
@@ -612,7 +648,7 @@ export const FullProfile = ({
                       <select
                         value={addTypeAdmin}
                         onChange={handleSelectaddTypeAdmin}
-                        style={ theme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
+                        style={ currentTheme === "1" ? { backgroundColor: "#22242b" } : { backgroundColor: "white" }}
                       >
                         <option value="">Выберите доп.должность</option>
                         <option value=""></option>
